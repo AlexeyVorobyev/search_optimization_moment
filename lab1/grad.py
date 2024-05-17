@@ -2,6 +2,9 @@ import numpy
 import numpy as np
 import numdifftools as nd
 
+def func1(x,y):
+    return 2*x*x + x*y + y*y
+
 def buta(x, y):
     return numpy.power((x + 2 * y - 7), 2) + numpy.power((2 * x + y - 5), 2)
 
@@ -17,7 +20,7 @@ def make_data_lab_1():
     x_grid, y_grid = numpy.meshgrid(x, y)
 
     # В узлах рассчитываем значение функции
-    z = buta(x_grid, y_grid)
+    z = func1(x_grid, y_grid)
     return x_grid, y_grid, z
 
 
@@ -27,7 +30,7 @@ def funct_consider(res_x, res_y, res_step, res_iterations):
     z_list = []
 
     # Строим сетку в интервале от -10 до 10, имеющую 100 отсчетов по обоим координатам
-    for item in gradient_descent(buta, res_x, res_y, res_step, res_iterations):
+    for item in gradient_descent(func1, res_x, res_y, res_step, res_iterations):
         x_list.append(item[0])
         y_list.append(item[1])
         z_list.append(item[3])
@@ -60,8 +63,8 @@ def next_point(x, y, gx, gy, step) -> tuple:
 def gradient_descent(function, x0, y0, tk, m):
     yield x0, y0, 0, function(x0, y0)
 
-    e1 = 0.0001
-    e2 = 0.0001
+    e1 = 0.01
+    e2 = 0.01
 
     k = 0
     while True:
@@ -76,7 +79,7 @@ def gradient_descent(function, x0, y0, tk, m):
         x1, y1 = next_point(x0, y0, gx, gy, tk)  # 7
         f1 = function(x1, y1)
         f0 = function(x0, y0)
-        while not f1 < f0:  # 8 условие
+        while f1 >= f0:  # 8 условие
             tk = tk / 2
             x1, y1 = next_point(x0, y0, gx, gy, tk)
             f1 = function(x1, y1)

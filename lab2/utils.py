@@ -9,7 +9,7 @@ def make_data_lab_2():
 
     x_grid, y_grid = numpy.meshgrid(x, y)
 
-    z = 2 * x_grid * x_grid + 3 * y_grid * y_grid + 4 * x_grid * y_grid - 6 * x_grid - 3 * y_grid
+    z = 2 * x_grid * x_grid + 2 * x_grid * y_grid + 2* y_grid*y_grid - 4*x_grid - 6*y_grid
     return x_grid, y_grid, z
 
 
@@ -18,9 +18,9 @@ def kp(x, y):
     points = []
 
     def fun(x_i):  # Функция
-        x1 = x_i[0]
-        x2 = x_i[1]
-        return 2 * x1 * x1 + 3 * x2 * x2 + 4 * x1 * x2 - 6 * x1 - 3 * x2
+        x = x_i[0]
+        y = x_i[1]
+        return 2 * x * x + 2 * x * y + 2* y*y - 4*x - 6*y
 
     def callback(x_w):
         g_list = np.ndarray.tolist(x_w)
@@ -29,11 +29,13 @@ def kp(x, y):
 
     b = (0, float("inf"))  # диапазон поиска
     bounds = (b, b)
-    x0 = (x, y)  # начальная точка
-    con = {'type': 'eq', 'fun': fun}
+    con = (
+        {'type': 'ineq', 'fun': lambda x: x[0]},
+        {'type': 'ineq', 'fun': lambda x: x[1]},
+        {'type': 'ineq', 'fun': lambda x: 2 - x[0] - 2 * x[1]}
+    )
 
-    # основной вызов
-    res = minimize(fun, x0, method="SLSQP", bounds=bounds,
+    res = minimize(fun, _, method="SLSQP", bounds=bounds,
                    constraints=con, callback=callback)
 
     glist = np.ndarray.tolist(res.x)
@@ -42,3 +44,26 @@ def kp(x, y):
 
     for iteration, point in enumerate(points):
         yield iteration, point
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+_ = (0,0)

@@ -20,7 +20,7 @@ def main():
 
     window.title("SEARCH OPTIMISATION METHODS")
 
-    fig = plt.figure(figsize=(14, 14))
+    fig = plt.figure(figsize=(12, 12))
     fig.add_subplot(projection='3d')
 
     canvas = FigureCanvasTkAgg(fig, master=window)
